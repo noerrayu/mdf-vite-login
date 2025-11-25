@@ -31,7 +31,7 @@ Create a `.env` inside the project root:
 
 ```
 VITE_AUTH_URL=auth.local.url:PORT/
-VITE_REMOTE_APP_URL=remote.local.url.com:PORT/
+VITE_REMOTE_APP_URL=remote.local.url:PORT/
 VITE_HOST_APP_URL=host.local.url:PORT/
 VITE_REMOTE=remote.local.url
 VITE_HOST=host.local.url
