@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 const AUTH_URL = import.meta.env.VITE_AUTH_URL;
+const HOST_APP_URL = import.meta.env.VITE_HOST_APP_URL;
 
 export default function Header({ username = "Guest", app = "Remote App" }) {
   const [open, setOpen] = useState(false);
@@ -14,7 +15,7 @@ export default function Header({ username = "Guest", app = "Remote App" }) {
       credentials: "include",
     });
     setOpen(false);
-    window.location.reload();
+    window.location.href = HOST_APP_URL;
   };
 
   // Close dropdown when clicking outside

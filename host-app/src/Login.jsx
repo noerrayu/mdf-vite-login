@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 
 const AUTH_URL = import.meta.env.VITE_AUTH_URL;
 
@@ -14,6 +15,23 @@ const LoginForm = ({ setLoggedIn, onLogin }) => {
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
+    });
+
+    if (res.ok) {
+      setLoggedIn(true);
+      onLogin();
+    } else {
+      alert("Login failed");
+    }
+  };
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    const cr = credentialResponse.credential;
+    const res = await fetch(`${AUTH_URL}google-login`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: cr }),
     });
 
     if (res.ok) {
@@ -63,9 +81,18 @@ const LoginForm = ({ setLoggedIn, onLogin }) => {
               className="w-full px-4 py-2 border rounded-lg"
             />
           </div>
-          <button type="submit" className="w-full text-white py-2 rounded-lg">
+          <button
+            type="submit"
+            className="w-full text-white py-2 rounded-lg mb-4 bg-black"
+          >
             Login
           </button>
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
         </form>
       </div>
     </div>

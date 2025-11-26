@@ -21,7 +21,7 @@ function App() {
 
         if (res.ok) {
           const data = await res.json();
-          setUsername(data.user?.username || "");
+          setUsername(data.user?.username || data.user?.name || "Guest");
           setLoggedIn(true);
         } else {
           setLoggedIn(false);
@@ -49,7 +49,7 @@ function App() {
 
       if (res.ok) {
         const data = await res.json();
-        setUsername(data.user?.username || "");
+        setUsername(data.user?.username || data.user?.name || "Guest");
         setLoggedIn(true);
       }
     } catch (error) {

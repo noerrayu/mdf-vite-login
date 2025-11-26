@@ -1,64 +1,49 @@
-import React, { useState, useEffect, useCallback } from "react";
-import LoginForm from "./Login";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 
 const AUTH_URL = import.meta.env.VITE_AUTH_URL;
+const HOST_APP_URL = import.meta.env.VITE_HOST_APP_URL;
 
 function App() {
+  const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    let mounted = true;
-
     const checkLogin = async () => {
       try {
         const res = await fetch(`${AUTH_URL}user`, {
           credentials: "include",
         });
 
-        if (!mounted) return;
-
         if (res.ok) {
           const data = await res.json();
-          setUsername(data.user?.username || "");
+          setUsername(data.user?.username || data.user?.name || "Guest");
           setLoggedIn(true);
         } else {
           setLoggedIn(false);
         }
       } catch (error) {
-        if (mounted) {
-          console.error("Login check failed:", error);
-          setLoggedIn(false);
-        }
+        console.error("Login check failed:", error);
+        setLoggedIn(false);
+      } finally {
+        setLoading(false);
       }
     };
 
     checkLogin();
-
-    return () => {
-      mounted = false;
-    };
   }, []);
 
-  const handleLogin = useCallback(async () => {
-    try {
-      const res = await fetch(`${AUTH_URL}user`, {
-        credentials: "include",
-      });
+  // Wait until we know login status
+  if (loading)
+    return (
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-pink-500"></div>
+    );
 
-      if (res.ok) {
-        const data = await res.json();
-        setUsername(data.user?.username || "");
-        setLoggedIn(true);
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
-  }, []);
-
+  // Redirect only AFTER loading is complete
   if (!loggedIn) {
-    return <LoginForm setLoggedIn={setLoggedIn} onLogin={handleLogin} />;
+    window.location.href = HOST_APP_URL;
+    return null;
   }
 
   return (
