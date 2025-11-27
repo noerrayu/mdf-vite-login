@@ -19,7 +19,7 @@ const COOKIE_DOMAIN = ".mylocal.com";
 const COOKIE_SECURE = false; // dev harus false (tanpa https)
 // const COOKIE_SECURE = true;       // jika sudah pakai https
 const COOKIE_OPTIONS = {
-  httpOnly: false, // supaya bisa dibaca frontend
+  httpOnly: true, // supaya JS di browser ga bisa akses
   sameSite: "lax", // bisa diganti none jika https cross-domain
   secure: COOKIE_SECURE,
   domain: COOKIE_DOMAIN,
